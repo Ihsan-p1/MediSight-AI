@@ -2,14 +2,32 @@
 
 ## Quick Start
 
-### 1. Install Dependencies
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/Ihsan-p1/MediSight-AI.git
+cd MediSight-AI
+```
+
+### 2. Download Trained Models
+
+⚠️ **IMPORTANT**: The trained models are NOT in the git repository (too large).
+You must download them separately and place them in the `checkpoints/` folder.
+
+- **Download Link**: [Insert Link to Google Drive / GitHub Release here]
+- **Files needed**:
+  - `checkpoints/emotion_best.pth`
+  - `checkpoints/fatigue_best.pth`
+  - `checkpoints/pain_best.pth`
+
+### 3. Install Dependencies
 
 ```bash
 # Using Python 3.10.11
 py -3.10 -m pip install -r requirements.txt
 ```
 
-### 2. Run Demo
+### 4. Run Demo
 
 ```bash
 # Basic usage (webcam)
