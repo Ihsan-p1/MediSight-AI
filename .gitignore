@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+
+# Datasets (too large for git)
+data/
+datasets/
+*.zip
+*.tar.gz
+
+# Checkpoints (large binary files)
+checkpoints/
+*.pth
+
+# Logs and Output
+logs/
+output/
+*.log
+
+# System
+Thumbs.db
+Desktop.ini

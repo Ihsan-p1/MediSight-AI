@@ -1,0 +1,23 @@
+# MediSight-AI Requirements
+# Python 3.10.11
+
+# Deep Learning
+torch==2.6.0+cu124
+torchvision==0.21.0+cu124
+torchaudio==2.6.0+cu124
+
+# Computer Vision & Face Detection
+mediapipe>=0.10.0
+opencv-python>=4.8.0
+
+# Signal Processing (for rPPG)
+scipy>=1.11.0
+numpy>=1.24.0
+
+# Utilities
+tqdm>=4.65.0
+
+# Optional: For deployment
+# flask>=3.0.0
+# fastapi>=0.104.0
+# uvicorn>=0.24.0
