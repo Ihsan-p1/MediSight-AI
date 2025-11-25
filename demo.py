@@ -6,7 +6,7 @@ Interactive webcam demo showcasing all MediSight-AI capabilities:
 - Emotion recognition
 - Fatigue/drowsiness detection
 - Pain detection
-- Heart rate estimation (rPPG)
+
 """
 
 import cv2
@@ -97,29 +97,7 @@ def draw_ui_panel(frame, results, fps):
                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 255), 2)
         y_offset += line_height
     
-    # Heart Rate
-    if results['heart_rate']:
-        hr = results['heart_rate']
-        text = f"Heart Rate: {hr['bpm']:.0f} BPM"
-        quality_text = f"Quality: {hr['quality']*100:.0f}%"
-        
-        # Color based on quality
-        if hr['quality'] > 0.7:
-            color = (0, 255, 0)
-        elif hr['quality'] > 0.4:
-            color = (0, 255, 255)
-        else:
-            color = (0, 165, 255)
-        
-        cv2.putText(frame, text, (10, y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
-        cv2.putText(frame, quality_text, (300, y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
-        y_offset += line_height
-    else:
-        cv2.putText(frame, "Heart Rate: Buffering...", (10, y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (128, 128, 128), 2)
-        y_offset += line_height
+
     
     # Inference time
     cv2.putText(frame, f"Inference: {results['inference_time']:.1f}ms", (10, y_offset),
@@ -144,8 +122,7 @@ def main():
                        help='Disable fatigue detection')
     parser.add_argument('--no-pain', action='store_true', 
                        help='Disable pain detection')
-    parser.add_argument('--no-rppg', action='store_true', 
-                       help='Disable heart rate estimation')
+
     
     args = parser.parse_args()
     
@@ -176,18 +153,18 @@ def main():
     print("\n" + "=" * 60)
     print("Controls:")
     print("  Q - Quit")
-    print("  R - Reset rPPG buffer")
+
     print("  E - Toggle emotion recognition")
     print("  F - Toggle fatigue detection")
     print("  P - Toggle pain detection")
-    print("  H - Toggle heart rate estimation")
+
     print("=" * 60)
     
     # State
     enable_emotion = not args.no_emotion
     enable_fatigue = not args.no_fatigue
     enable_pain = not args.no_pain
-    enable_rppg = not args.no_rppg
+
     
     # FPS calculation
     import time
@@ -205,8 +182,7 @@ def main():
             frame,
             enable_emotion=enable_emotion,
             enable_fatigue=enable_fatigue,
-            enable_pain=enable_pain,
-            enable_rppg=enable_rppg
+            enable_pain=enable_pain
         )
         
         # Calculate FPS
@@ -229,9 +205,7 @@ def main():
         if key == ord('q'):
             print("\nQuitting...")
             break
-        elif key == ord('r'):
-            medisight.reset_rppg()
-            print("rPPG buffer reset")
+
         elif key == ord('e'):
             enable_emotion = not enable_emotion
             print(f"Emotion recognition: {'ON' if enable_emotion else 'OFF'}")
@@ -241,9 +215,7 @@ def main():
         elif key == ord('p'):
             enable_pain = not enable_pain
             print(f"Pain detection: {'ON' if enable_pain else 'OFF'}")
-        elif key == ord('h'):
-            enable_rppg = not enable_rppg
-            print(f"Heart rate estimation: {'ON' if enable_rppg else 'OFF'}")
+
     
     cap.release()
     cv2.destroyAllWindows()

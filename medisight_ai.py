@@ -6,7 +6,7 @@ This module integrates all MediSight-AI models into a single inference pipeline:
 - Emotion Recognition (EmotionNet)
 - Fatigue/Drowsiness Detection (DrowsinessNet)
 - Pain Detection (PainNet)
-- Heart Rate Estimation (rPPG)
+
 """
 
 import torch
@@ -17,7 +17,7 @@ import time
 
 from models import EmotionNet, DrowsinessNet, PainNet
 from face_detector import FaceDetector
-from rppg_estimator import rPPGEstimator
+
 from torchvision import transforms
 
 
@@ -30,7 +30,7 @@ class MediSightAI:
     - Emotion recognition (7 classes)
     - Fatigue/drowsiness detection (2 classes)
     - Pain detection (3 classes)
-    - Heart rate estimation via rPPG
+
     """
     
     def __init__(self, device: str = 'cuda', checkpoint_dir: str = 'checkpoints'):
@@ -44,9 +44,9 @@ class MediSightAI:
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')
         print(f"MediSight-AI initialized on device: {self.device}")
         
-        # Initialize face detector and rPPG estimator
+        # Initialize face detector
         self.face_detector = FaceDetector()
-        self.rppg_estimator = rPPGEstimator(fps=30, window_size=300)
+
         
         # Load trained models
         print("Loading trained models...")
@@ -113,8 +113,7 @@ class MediSightAI:
     def process_frame(self, frame: np.ndarray, 
                      enable_emotion: bool = True,
                      enable_fatigue: bool = True,
-                     enable_pain: bool = True,
-                     enable_rppg: bool = True) -> Dict:
+                     enable_pain: bool = True) -> Dict:
         """
         Process a single video frame and return all predictions.
         
@@ -123,7 +122,7 @@ class MediSightAI:
             enable_emotion: Whether to run emotion recognition
             enable_fatigue: Whether to run fatigue detection
             enable_pain: Whether to run pain detection
-            enable_rppg: Whether to update rPPG estimation
+
             
         Returns:
             Dictionary containing:
@@ -133,7 +132,7 @@ class MediSightAI:
             - 'emotion': {'label': str, 'confidence': float, 'probabilities': dict} or None
             - 'fatigue': {'label': str, 'confidence': float, 'probabilities': dict} or None
             - 'pain': {'label': str, 'confidence': float, 'probabilities': dict} or None
-            - 'heart_rate': {'bpm': float, 'confidence': float, 'quality': float} or None
+
             - 'inference_time': float (milliseconds)
         """
         start_time = time.time()
@@ -145,7 +144,7 @@ class MediSightAI:
             'emotion': None,
             'fatigue': None,
             'pain': None,
-            'heart_rate': None,
+
             'inference_time': 0.0
         }
         
@@ -176,19 +175,7 @@ class MediSightAI:
         if enable_pain:
             results['pain'] = self._predict_pain(face_roi)
         
-        # Update rPPG estimation
-        if enable_rppg:
-            self.rppg_estimator.process_frame(face_roi)
-            hr_result = self.rppg_estimator.estimate_heart_rate()
-            
-            if hr_result is not None:
-                hr_bpm, confidence = hr_result
-                quality = self.rppg_estimator.get_signal_quality()
-                results['heart_rate'] = {
-                    'bpm': hr_bpm,
-                    'confidence': confidence,
-                    'quality': quality
-                }
+
         
         results['inference_time'] = (time.time() - start_time) * 1000
         
@@ -374,22 +361,11 @@ class MediSightAI:
                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 255), 2)
             y_offset += 30
         
-        if results['heart_rate']:
-            hr = results['heart_rate']
-            text = f"HR: {hr['bpm']:.0f} BPM (Q: {hr['quality']:.2f})"
-            cv2.putText(annotated, text, (10, y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
-            y_offset += 30
-        
         # Inference time
         cv2.putText(annotated, f"Inference: {results['inference_time']:.1f}ms", (10, y_offset),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
         
         return annotated
-    
-    def reset_rppg(self):
-        """Reset rPPG buffer."""
-        self.rppg_estimator.reset()
 
 
 if __name__ == "__main__":
@@ -401,7 +377,7 @@ if __name__ == "__main__":
     # Test with webcam
     cap = cv2.VideoCapture(0)
     
-    print("\nPress 'q' to quit, 'r' to reset rPPG buffer")
+    print("\nPress 'q' to quit")
     
     while True:
         ret, frame = cap.read()
@@ -418,9 +394,7 @@ if __name__ == "__main__":
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
             break
-        elif key == ord('r'):
-            medisight.reset_rppg()
-            print("rPPG buffer reset")
+
     
     cap.release()
     cv2.destroyAllWindows()

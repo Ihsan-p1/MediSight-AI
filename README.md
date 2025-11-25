@@ -44,7 +44,7 @@ py -3.10 demo.py --device cuda --width 1280 --height 720
 - **E**: Toggle emotion recognition
 - **F**: Toggle fatigue detection
 - **P**: Toggle pain detection
-- **H**: Toggle heart rate estimation
+
 
 ## File Structure
 
@@ -56,7 +56,7 @@ Mediapipe2/
 │   └── pain_best.pth        # Pain model (100% test acc)
 ├── models.py                 # Model architectures
 ├── face_detector.py          # MediaPipe face detection + landmarks
-├── rppg_estimator.py         # Heart rate estimation
+
 ├── medisight_ai.py           # Unified inference system
 ├── demo.py                   # Real-time demo application
 ├── train.py                  # Training script
@@ -82,8 +82,7 @@ results = medisight.process_frame(frame)
 print(f"Emotion: {results['emotion']['label']}")
 print(f"Fatigue: {results['fatigue']['label']}")
 print(f"Pain: {results['pain']['label']}")
-if results['heart_rate']:
-    print(f"Heart Rate: {results['heart_rate']['bpm']:.0f} BPM")
+
 ```
 
 ### Process Video
@@ -109,7 +108,7 @@ medisight.process_video('input.mp4', output_path='output.mp4', display=True)
 | Emotion Model | ~2ms | >500 |
 | Fatigue Model | ~3ms | >300 |
 | Pain Model | ~2ms | >500 |
-| rPPG Update | ~1ms | >1000 |
+
 | **Total Pipeline** | **~20ms** | **~50 FPS** |
 
 ## Model Details
@@ -132,11 +131,7 @@ medisight.process_video('input.mp4', output_path='output.mp4', display=True)
 - **Classes**: disgust, sadness, surprise (pain proxies)
 - **Accuracy**: 100% (test), 100% (val)
 
-### Heart Rate (rPPG)
-- **Method**: Green channel + FFT
-- **Range**: 40-240 BPM
-- **Window**: 10 seconds (300 frames at 30 FPS)
-- **Accuracy**: Depends on lighting and subject stability
+
 
 ## Deployment Options
 
@@ -204,10 +199,7 @@ async def analyze(file: UploadFile = File(...)):
 - **Solution**: Face camera directly
 - **Solution**: Adjust `min_detection_confidence` in `FaceDetector`
 
-### Issue: Unstable heart rate
-- **Solution**: Stay still for 10+ seconds
-- **Solution**: Ensure good lighting (avoid flickering)
-- **Solution**: Check signal quality metric
+
 
 ## License
 

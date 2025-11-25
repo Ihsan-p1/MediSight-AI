@@ -10,8 +10,8 @@ torchaudio==2.6.0+cu124
 mediapipe>=0.10.0
 opencv-python>=4.8.0
 
-# Signal Processing (for rPPG)
-scipy>=1.11.0
+# Signal Processing (for rPPG) - REMOVED
+# scipy>=1.11.0
 numpy>=1.24.0
 
 # Utilities
