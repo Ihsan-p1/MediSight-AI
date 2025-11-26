@@ -14,7 +14,7 @@ cd MediSight-AI
 ⚠️ **IMPORTANT**: The trained models are NOT in the git repository (too large).
 You must download them separately and place them in the `checkpoints/` folder.
 
-- **Download Link**: [Insert Link to Google Drive / GitHub Release here]
+- **Download Link**: https://drive.google.com/drive/folders/16frUJr765xFHeoHF9Zv8LZpxz71M1frU
 - **Files needed**:
   - `checkpoints/emotion_best.pth`
   - `checkpoints/fatigue_best.pth`
