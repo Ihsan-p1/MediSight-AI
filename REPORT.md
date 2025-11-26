@@ -13,20 +13,6 @@ The system runs efficiently on consumer hardware (NVIDIA RTX 3050), achieving **
 ## 2. System Architecture
 
 The solution is built on a modular architecture integrating custom deep learning models with industry-standard computer vision libraries.
-
-### 2.1 Core Components
-1.  **Face Analysis Engine**:
-    -   Powered by **MediaPipe** for ultra-fast face detection and 468-point landmark extraction.
-    -   Provides robust Region of Interest (ROI) extraction for downstream models.
-
-2.  **Deep Learning Models**:
-    -   **EmotionNet**: Custom CNN trained on FER2013. Detects: *Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise*.
-    -   **DrowsinessNet**: MobileNetV2-based classifier. Detects: *Drowsy, Non-Drowsy*.
-    -   **PainNet**: Specialized CNN for pain expression. Detects: *Pain-related micro-expressions*.
-
-
-
-## 3. Model Performance
 ### 4.1 Key Features
 -   **GPU Acceleration**: Fully optimized for CUDA, utilizing Mixed Precision Training (AMP) for faster training and inference.
 -   **Real-Time Processing**: Unified inference pipeline (`MediSightAI` class) processes video frames in **~20ms**, enabling smooth real-time feedback.

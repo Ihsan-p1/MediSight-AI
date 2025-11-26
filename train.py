@@ -61,6 +61,8 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
             
             print(f"{phase} Loss: {epoch_loss:.4f} | Acc: {epoch_acc:.4f}")
 
+
+
             # Deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
                 best_acc = epoch_acc

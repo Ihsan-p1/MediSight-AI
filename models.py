@@ -65,7 +65,6 @@ class EmotionNet(nn.Module):
         x = self.dropout3(x)
         
         # Dense
-        # print(f"Debug Shape: {x.shape}") 
         x = self.flatten(x)
         x = F.relu(self.bn_fc1(self.fc1(x)))
         x = self.dropout4(x)
